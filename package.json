@@ -1,6 +1,9 @@
 {
   "name": "vote_on_eth",
   "version": "0.1.0",
+  "engines": {
+    "node": "12.x"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
