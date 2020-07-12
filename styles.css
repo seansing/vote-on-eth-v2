@@ -1,11 +1,92 @@
+/*Global*/
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-html {
-  background: #e3e3e3;
+body {
+  background: #e9e9e9;
+  font-family: "Abel", sans-serif;
 }
+
+/*Landing section*/
 .title {
-  font-family: "Monoton", cursive;
+  font-family: "Abel", sans-serif;
+  font-weight: bold;
+  font-size: 3rem;
+  padding-top: 70px;
+}
+.description {
+  font-size: 1.2rem;
+}
+h2 {
+  text-align: center;
+  font-family: "Abel", sans-serif;
+  margin: 1.5rem 0 2rem 0;
+}
+.pageContainer {
+  text-align: center;
+  margin: 0 70px 70px 70px;
+}
+.pageContainer a {
+  float: left;
+  display: block;
+}
+#backArrow {
+  margin-top: 50px;
+}
+
+.pageContainer h4 {
+  font-family: "Abel", sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+}
+.landingButtons {
+  display: flex;
+  justify-content: center;
+}
+
+#voteonethimage {
+  width: 12rem;
+  margin: 10px 0px 40px 20px;
+}
+.landing {
+  height: 100vh;
+}
+#existingBallotsSection {
+  height: 100vh;
+  padding-top: 70px;
+}
+
+/*Ballot page */
+.ui.message {
+  font-size: 1.4rem;
+}
+.ballotState {
+  padding: 1rem;
+  background-color: yellow;
+}
+.voteTableSection {
+  margin: 5rem 3rem 5rem 3rem;
+}
+
+/*Admin page */
+.stateButtons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.ui.fluid.card .content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.addVoterForm {
+  background-color: white;
+  margin: 2rem;
+  padding: 1.5rem;
+}
+.ui.centered.card .header {
+  font-family: "Abel", sans-serif;
 }
