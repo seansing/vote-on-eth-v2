@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ballotInstance from "../../ethereum/ballot";
 import web3 from "../../ethereum/web3";
-import Router from "next/router";
+import zeenusToken from "../../ethereum/zeenusToken";
 import { Form, Button, Input, Message, Table } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import Link from "next/link";
@@ -10,6 +10,7 @@ class BallotShow extends Component {
   static async getInitialProps(props) {
     const ballotAddress = props.query.id;
     const ballot = ballotInstance(ballotAddress);
+
     return {
       manager: await ballot.methods.manager().call(),
       title: await ballot.methods.title().call(),
@@ -19,14 +20,21 @@ class BallotShow extends Component {
       approvedVotersCount: await ballot.methods.approvedVotersCount().call(),
       ballotAddress: ballotAddress,
       ballotState: await ballot.methods.state().call(),
+      ballotStartTime: await ballot.methods.startTime().call(),
+      ballotEndTime: await ballot.methods.endTime().call(),
+      resultsVote1: await ballot.methods.getResults1().call(),
+      resultsVote2: await ballot.methods.getResults2().call(),
     };
   }
 
   state = {
     errorMessageVote1: "",
-    errorMessgaeVote2: "",
+    errorMessageVote2: "",
+    errorMessageApprove: "",
     loadingVote1: false,
     loadingVote2: false,
+    loadingApprove: false,
+    tokensApproved: 0
   };
 
   renderBallotState() {
@@ -39,17 +47,59 @@ class BallotShow extends Component {
     }
   }
 
+  renderVotingButtonOrResult1() {
+    if (this.props.ballotState === "2"  ) {
+      return <h2 style={{margin: "0"}}>{this.props.resultsVote1} Token Votes</h2>;
+    } else {
+      return <Button loading={this.state.loadingVote1} secondary>
+      Vote
+    </Button>;
+    }
+  }
+  renderVotingButtonOrResult2() {
+    if (this.props.ballotState === "2"  ) {
+      return <h2 style={{margin: "0"}}>{this.props.resultsVote2} Token Votes</h2>;
+    } else {
+      return <Button loading={this.state.loadingVote2} secondary>
+      Vote
+    </Button>;
+    }
+  }
+  
+
+  onInput = (event) => {
+    this.setState({tokensApproved: event.target.value});
+    console.log(event.target.value);
+  }
+
+  approveZeenus = async (event) => {
+    event.preventDefault();
+
+    console.log("testing")
+    this.setState({ loadingApprove: true, errorMessageApprove: "" });
+    
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await zeenusToken.methods.approve(this.props.ballotAddress, this.state.tokensApproved).send({ from: accounts[0] });
+      console.log("success");
+    } catch (err) {
+      this.setState({ errorMessageApprove: err.message });
+      console.log("fail");
+    }
+    this.setState({ loadingApprove: false });
+  }
+
   onVote1 = async (event) => {
     event.preventDefault();
 
     const ballotAddress = this.props.ballotAddress;
     const ballot = ballotInstance(ballotAddress);
 
-    this.setState({ loadingVote1: true, errorMessage: "" });
+    this.setState({ loadingVote1: true, errorMessageVote1: "" });
 
     try {
       const accounts = await web3.eth.getAccounts();
-      await ballot.methods.voteOption1().send({ from: accounts[0] });
+      await ballot.methods.voteOption1(this.state.tokensApproved).send({ from: accounts[0] });
     } catch (err) {
       this.setState({ errorMessageVote1: err.message });
     }
@@ -62,16 +112,21 @@ class BallotShow extends Component {
     const ballotAddress = this.props.ballotAddress;
     const ballot = ballotInstance(ballotAddress);
 
-    this.setState({ loadingVote2: true, errorMessage: "" });
+    this.setState({ loadingVote2: true, errorMessageVote2: "" });
 
     try {
       const accounts = await web3.eth.getAccounts();
-      await ballot.methods.voteOption2().send({ from: accounts[0] });
+      await ballot.methods.voteOption2(this.state.tokensApproved).send({ from: accounts[0] });
     } catch (err) {
       this.setState({ errorMessageVote2: err.message });
     }
     this.setState({ loadingVote2: false });
   };
+
+  getDate = (epochDate) => {
+    var d = new Date(epochDate * 1000).toLocaleString();
+    return d;
+  }
 
   render() {
     const {
@@ -82,6 +137,10 @@ class BallotShow extends Component {
       option2,
       approvedVotersCount,
       ballotAddress,
+      ballotState,
+      ballotStartTime,
+      ballotEndTime,
+      getResults1
     } = this.props;
 
     return (
@@ -93,8 +152,34 @@ class BallotShow extends Component {
         </Link>
         <div className="pageContainer">
           <h2>{title} Ballot</h2>
+          <h3>Ballot start time : {this.getDate(ballotStartTime)}</h3>
+          <h3>Ballot end time : {this.getDate(ballotEndTime)}</h3>
 
           {this.renderBallotState()}
+          <hr />
+          <div className="voteTableSection">
+            <h4>This ballot uses the 'approve and transferFrom' approach for receiving ERC20 tokens as votes.</h4>
+            <h4>Please set and approve the number of ZEENUS tokens you wish cast as votes.</h4>
+            <h4>Once the transaction is successful, you may proceed to cast your vote based on the number of tokens you approved.</h4>
+            <Form
+              onSubmit={this.approveZeenus}
+              error={!!this.state.errorMessageApprove}
+            >
+              <Input
+                label={{ basic: true, content: 'ZEENUS' }}
+                labelPosition='right'
+                placeholder='Enter number of tokens to approve.'
+                onChange={this.onInput}
+                style={{marginRight:"100px"}}
+              />
+              <Button loading={this.state.loadingApprove}>Approve</Button>
+              <Message
+                          error
+                          header="Oops!"
+                          content={this.state.errorMessageApprove}
+                        />
+              </Form>
+          </div>
           <hr />
           <div className="voteTableSection">
             <h4>{description}</h4>
@@ -109,9 +194,7 @@ class BallotShow extends Component {
                       <h3>{option1}</h3>
                     </Table.Cell>
                     <Table.Cell width={1}>
-                      <Button loading={this.state.loadingVote1} secondary>
-                        Vote
-                      </Button>
+                      {this.renderVotingButtonOrResult1()}
                       <Message
                         error
                         header="Oops!"
@@ -133,9 +216,7 @@ class BallotShow extends Component {
                       <h3>{option2}</h3>
                     </Table.Cell>
                     <Table.Cell width={1}>
-                      <Button loading={this.state.loadingVote2} secondary>
-                        Vote
-                      </Button>
+                    {this.renderVotingButtonOrResult2()}
                       <Message
                         error
                         header="Oops!"

@@ -10,6 +10,8 @@ class BallotNew extends Component {
   state = {
     title: "",
     description: "",
+    startDate: 0,
+    endDate: 0,
     option1: "",
     option2: "",
     errorMessage: "",
@@ -28,7 +30,9 @@ class BallotNew extends Component {
           this.state.title,
           this.state.description,
           this.state.option1,
-          this.state.option2
+          this.state.option2,
+          this.state.startDate,
+          this.state.endDate
         )
         .send({
           from: accounts[0],
@@ -40,6 +44,19 @@ class BallotNew extends Component {
     }
     this.setState({ loading: false });
   };
+
+  onChangeStartDate = (e) => {
+    let epoch = Date.parse(e.target.value);
+    this.setState({startDate:epoch/1000});
+  }
+  onChangeEndDate = (e) => {
+    let epoch = Date.parse(e.target.value);
+    this.setState({endDate:epoch/1000});
+  }
+  checkState = () => {
+    console.log(this.state.startDate); 
+    console.log(this.state.endDate);
+  }
 
   render() {
     return (
@@ -53,7 +70,7 @@ class BallotNew extends Component {
           <h2>New Ballot Form</h2>
           <hr />
           <h4>
-            Please provide your ballot with a title, description and two options
+            Please provide your ballot with a title, description, start and end dates and two options
             to vote from.
           </h4>
           <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
@@ -72,6 +89,11 @@ class BallotNew extends Component {
                   this.setState({ description: event.target.value })
                 }
               />
+              <label for="ballotStart">Start date:</label>
+              <input onChange={this.onChangeStartDate} type="datetime-local" id="ballotStart" name="ballotStart"></input>
+              <label for="ballotEnd">End date:</label>
+              <input onChange={this.onChangeEndDate}type="datetime-local" id="ballotEnd" name="ballotEnd"></input>
+              
               <label>Option 1</label>
               <Input
                 value={this.state.option1}

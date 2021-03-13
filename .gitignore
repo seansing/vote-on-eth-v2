@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/ethereum/node_modules
 /.pnp
 .pnp.js
 

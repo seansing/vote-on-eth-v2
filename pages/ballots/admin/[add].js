@@ -15,6 +15,7 @@ class BallotAdmin extends Component {
       approvedVotersCount: await ballot.methods.approvedVotersCount().call(),
       ballotAddress: ballotAddress,
       ballotState: await ballot.methods.state().call(),
+      totalTokens: await ballot.methods.getTotalTokens().call(),
       /*votersList: await ballot.methods.getVotersList().call(),*/
     };
   }
@@ -167,7 +168,7 @@ class BallotAdmin extends Component {
           <h4>Voters</h4>
           <div className="addVoterForm">
             <h4>Total approved voters: {approvedVotersCount}</h4>
-            <h4>Total votes received: </h4>
+            <h4>Total votes received: {this.props.totalTokens} </h4>
             <Form
               onSubmit={this.onAddVoter}
               error={!!this.state.errorMessageAddVoter}

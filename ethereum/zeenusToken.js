@@ -2,11 +2,11 @@
 import web3 from "./web3";
 
 //tell web3 about already deployed contract by providing address and abi of deployed contract.
-import BallotFactory from "./artifacts/contracts/Voteoneth.sol/BallotFactory.json";
+import ZeenusToken from "./build/contracts/ZeenusToken.json";
 
 const instance = new web3.eth.Contract(
-  BallotFactory.abi,
-  "0x2857f6737EaF0d04b94A89159d2270bEd7aeae3d"
+  ZeenusToken,
+  "0x1f9061B953bBa0E36BF50F21876132DcF276fC6e"
 );
 
 export default instance;

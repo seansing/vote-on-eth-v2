@@ -53,6 +53,15 @@ h2 {
 .landing {
   height: 100vh;
 }
+#howToSection {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+.howToDescribe {
+  font-size: 1.6rem;
+  text-align: left;
+  margin: 0 80px;
+}
 #existingBallotsSection {
   height: 100vh;
   padding-top: 70px;
@@ -69,7 +78,9 @@ h2 {
 .voteTableSection {
   margin: 5rem 3rem 5rem 3rem;
 }
-
+.input {
+  text-align: center;
+}
 /*Admin page */
 .stateButtons {
   display: flex;

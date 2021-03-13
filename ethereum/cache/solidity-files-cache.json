@@ -1,0 +1,75 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/henryking/Dapps/automata_assignment/vote-on-eth_v2/ethereum/contracts/Migrations.sol": {
+      "lastModificationDate": 1615615272906,
+      "contentHash": "b73b17d35c06a31ef91d331ebe15f8b8",
+      "sourceName": "contracts/Migrations.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.21 <0.8.0"
+      ],
+      "artifacts": [
+        "Migrations"
+      ]
+    },
+    "/Users/henryking/Dapps/automata_assignment/vote-on-eth_v2/ethereum/contracts/Voteoneth.sol": {
+      "lastModificationDate": 1615615200160,
+      "contentHash": "47bdb4ae9292065b87aca9035b00832f",
+      "sourceName": "contracts/Voteoneth.sol",
+      "solcConfig": {
+        "version": "0.7.3",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0 <0.8.0"
+      ],
+      "artifacts": [
+        "Ballot",
+        "BallotFactory",
+        "ERC20Interface"
+      ]
+    }
+  }
+}

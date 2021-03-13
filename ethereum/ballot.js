@@ -1,5 +1,5 @@
 import web3 from "./web3";
-import Ballot from "./build/contracts/Ballot.json";
+import Ballot from "./artifacts/contracts/Voteoneth.sol/Ballot.json";
 
 //We need to dynamically receive address.
 
