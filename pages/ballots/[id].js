@@ -11,6 +11,18 @@ class BallotShow extends Component {
     const ballotAddress = props.query.id;
     const ballot = ballotInstance(ballotAddress);
 
+    const checkState = await ballot.methods.state().call();
+    let resultsVote1;
+    let resultsVote2;
+
+    if (checkState === "2") {
+      resultsVote1 = await ballot.methods.getResults1().call();
+      resultsVote2 = await ballot.methods.getResults2().call();
+    } else {
+      resultsVote1 = 0;
+      resultsVote2 = 0;
+    }
+
     return {
       manager: await ballot.methods.manager().call(),
       title: await ballot.methods.title().call(),
@@ -22,8 +34,8 @@ class BallotShow extends Component {
       ballotState: await ballot.methods.state().call(),
       ballotStartTime: await ballot.methods.startTime().call(),
       ballotEndTime: await ballot.methods.endTime().call(),
-      resultsVote1: await ballot.methods.getResults1().call(),
-      resultsVote2: await ballot.methods.getResults2().call(),
+      resultsVote1: resultsVote1,
+      resultsVote2: resultsVote2
     };
   }
 
